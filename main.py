@@ -6,7 +6,6 @@ import re
 import unicodedata
 import sys
 from datetime import date
-from time import sleep
 
 # --CONSTANTES--
 FILE    = 'todo.csv'
@@ -17,8 +16,7 @@ WIDTH   = shutil.get_terminal_size().columns # largura do terminal
 YELLOW        = '\033[33m'
 GREEN         = '\033[32m'
 BRIGHT_GREEN  = '\033[92m'
-BLUE          = '\033[34m'
-GREY          = '\033[90m' #'\033[38;5;239m'
+GREY          = '\033[90m'
 RESET         = '\033[0m'
 
 
@@ -32,9 +30,9 @@ def centering(text, width=WIDTH):
     space = max(width - visible(text), 0)
     return ' ' * (space // 2) + text
 
-def ljust_grey(text, x, fill='-', color=GREY):
-    missing = max(x - len(text), 0)
-    return text + color + fill * missing + RESET
+
+def color_text(text, color=GREY):
+    return color + text + RESET
 
 
 def create(task, is_done=False, is_pinned=False, is_daily=False):
@@ -54,7 +52,7 @@ def read_all():
     os.system('clear')
 
     print(f'\n\n')
-    print(centering(f'--- TO DO LIST ---\n'))
+    print(centering(f'TO DO:\n'))
 
     with open(FILE, newline='') as f:
         task_list = csv.reader(f)
@@ -70,15 +68,31 @@ def read_all():
         aux = max(len(t[0]) for t in tasks) + 9
 
         for task in tasks:
-            is_done = task[1] == 'True'
+            is_done = task[1]   == 'True'
             is_pinned = task[3] == 'True'
-            is_daily = task[4] == 'True'
+            is_daily = task[4]  == 'True'
 
-            done = 'ok' if is_done else '  '
-            color = '' if is_done else '\033[90m'
-            show_pin = '📌 ' if is_pinned else '   '
-            show_daily = '🗓️' if is_daily else ' '
-            display_line = f'   {show_daily}' + f'{show_pin}' + ljust_grey(f'{task[0]} ', aux) + f'{color}[{done}]{RESET}' + '      '
+            done       = 'ok'       if is_done   else '  '
+            color      = '\033[90m' if is_done   else ''
+            show_pin   = '📌 '      if is_pinned else '   '
+            show_daily = '🗓️'       if is_daily  else ' '
+
+            task_name = f'{task[0]} '
+            missing = max(aux - len(task_name), 0)
+
+            if is_done:
+                task_name = color_text(task_name, GREY)
+
+            dashes = color_text('-' * missing, GREY)
+
+            display_line = (
+                f'{show_daily}'
+                f'{show_pin}'
+                f'{task_name}'
+                f'{dashes}'
+                f'{color}[{done}]{RESET}'
+                '    '
+            )
 
             print(centering(display_line))
 
@@ -99,7 +113,7 @@ def update_is_done(task):
 
             writer.writerow(t) # reescreve o arquivo com o campo atualizado
 
-    os.replace(TMP, FILE) # trasforma a copia no original
+    os.replace(TMP, FILE)
 
 
 def update_is_pinned(task):
@@ -118,10 +132,10 @@ def update_is_pinned(task):
 
             writer.writerow(t) # reescreve o arquivo com o campo atualizado
 
-    os.replace(TMP, FILE) # trasforma a copia no original
+    os.replace(TMP, FILE)
 
 
-def pinned_tasks_first():
+def pinned_tasks_first(recently_pinned):
     pinned_tasks = []
     not_pinned_tasks = []
 
@@ -131,18 +145,31 @@ def pinned_tasks_first():
 
         for task in task_list:
             pinned = task[3] == 'True'
-            if pinned:
+            if pinned and task[0] == recently_pinned:
                 pinned_tasks.append(task)
-            else:
+
+            elif task[0] == recently_pinned:
                 not_pinned_tasks.append(task)
 
+    with open(FILE, newline='') as src:
+        task_list = csv.reader(src)
+        next(task_list, None)
+
+        for task in task_list:
+            pinned = task[3] == 'True'
+            if pinned and task[0] != recently_pinned:
+                pinned_tasks.append(task)
+                
+            elif task[0] != recently_pinned:
+                not_pinned_tasks.append(task)
+ 
     with open(TMP, 'w', newline='') as dst:
         writer = csv.writer(dst)
         writer.writerow(HEADER)
         writer.writerows(pinned_tasks)
         writer.writerows(not_pinned_tasks)
 
-    os.replace(TMP, FILE) # trasforma a copia no original
+    os.replace(TMP, FILE)
 
 
 def update_is_daily(task):
@@ -161,7 +188,7 @@ def update_is_daily(task):
 
             writer.writerow(t) # reescreve o arquivo com o campo atualizado
 
-    os.replace(TMP, FILE) # trasforma a copia no original
+    os.replace(TMP, FILE) 
 
 
 def delete(task):
@@ -179,7 +206,7 @@ def delete(task):
             if t[0] != task or pinned:
                 writer.writerow(t)
 
-    os.replace(TMP, FILE) # trasforma a copia no original
+    os.replace(TMP, FILE) 
 
 
 def delete_all():
@@ -225,7 +252,7 @@ def show_info():
     formtd_info = info.format(YELLOW=YELLOW, RESET=RESET)
     print(formtd_info)
 
-    input(f'\n{GREY}Pressione {YELLOW}ENTER{RESET} {GREY}para voltar...{RESET}')
+    input(f'\n  {GREY}Pressione {YELLOW}ENTER{RESET} {GREY}para voltar...{RESET}')
 
 
 def menu(option):
@@ -248,7 +275,7 @@ def menu(option):
 
         case ['pin', *_]:
             update_is_pinned(option[1].upper())
-            pinned_tasks_first()
+            pinned_tasks_first(option[1].upper())
             display()
 
         case ['dly', *_]:
@@ -275,7 +302,7 @@ def display():
     print('')
     print(centering(
         f'{GREY}Digite {YELLOW}info{RESET}{GREY} '
-        f'para ver o cheatsheet.{RESET}'
+        f'para ver a lista de comandos.{RESET}'
     ))
 
 
