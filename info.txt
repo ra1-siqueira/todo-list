@@ -1,20 +1,23 @@
 
     Cheatsheet:
 
-  {YELLOW}add <tarefa>{RESET}  -> adiciona uma tarefa
-  {YELLOW}rmv <tarefa>{RESET}  -> remove uma tarefa
-  {YELLOW}done <tarefa>{RESET} -> marca/desmarca uma tarefa como feita
-  {YELLOW}pin <tarefa>{RESET}  -> fixa/desfixa uma tarefa
-  {YELLOW}dly <tarefa>{RESET}  -> marca/desmarca uma tarefa como diária
-  {YELLOW}umrkall{RESET}       -> desmarca todas as tarefas
-  {YELLOW}cl{RESET}            -> limpa a lista
-  {YELLOW}rfsh{RESET}          -> recarrega a lista
-  {YELLOW}ex{RESET}            -> finaliza o programa
+  {YELLOW}add <tarefa>{RESET} ──── adiciona uma tarefa
+  {YELLOW}done <tarefa>{RESET} ─── marca/desmarca uma tarefa como feita
+  {YELLOW}pin <tarefa>{RESET} ──── fixa uma tarefa
+  {YELLOW}unpin <tarefa>{RESET} ── desfixa uma tarefa
+  {YELLOW}dly <tarefa>{RESET} ──── marca/desmarca uma tarefa como diária
+  {YELLOW}rm <tarefa>{RESET} ───── remove uma tarefa
+  {YELLOW}f-rm <tarefa>{RESET} ─── remove uma tarefa, mesmo se ela estiver fixada
+  {YELLOW}umrkall{RESET} ───────── desmarca todas as tarefas feitas
+  {YELLOW}cl{RESET} ────────────── apaga a lista
+  {YELLOW}f-cl{RESET} ──────────── apaga a lista, incluindo as tarefas fixadas
+  {YELLOW}rfsh{RESET} ──────────── recarrega a lista
+  {YELLOW}ex{RESET} ────────────── finaliza o programa
 
 
     Observações:
 
-* Ao ser fixada, uma tarefa não pode ser removida.
+* Ao ser fixada, uma tarefa não pode ser removida com 'rm' ou 'cl'.
 
 * Se uma tarefa é diária e foi concluída num dia,
   no dia seguinte ela voltará ao estado pendente.
