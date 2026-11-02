@@ -23,6 +23,8 @@
 * Se uma tarefa é diária e foi concluída num dia,
   no dia seguinte ela voltará ao estado pendente.
 
+* Após redimensionar o terminal, rode 'rfsh' para centralizar a lista.
+
 * Caso o programa tenha ficado rodando de um dia para o outro
   e o estado da tarefa diária não tenha sido atualizado, rode
   o comando 'rfsh'.

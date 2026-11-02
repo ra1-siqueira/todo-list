@@ -10,7 +10,6 @@ from terminal_ui import (
     visible,
     centered,
     color_text,
-    WIDTH,
     GREY,
     YELLOW,
     GREEN,
@@ -48,7 +47,7 @@ def show_tasks(manager: TaskManager) -> None:
             f'{task_name}'
             f'{dashes}'
             f'{color}[{done}]{RESET}'
-            '    '
+            '  '
         )
         print(centered(display_line))
 

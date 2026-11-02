@@ -5,7 +5,7 @@ import sys
 import termios
 import tty
 
-WIDTH  : int = shutil.get_terminal_size().columns # largura do terminal
+#WIDTH  : int = shutil.get_terminal_size().columns # largura do terminal
 GREY   : str = '\033[90m'
 YELLOW : str = '\033[33m'
 GREEN  : str = '\033[32m'
@@ -30,7 +30,8 @@ def visible(text: str) -> int:
     )
     return len(colorless) + extras
 
-def centered(text: str, width: int = WIDTH) -> str:
+def centered(text: str, width: int = 0) -> str:
+    width = shutil.get_terminal_size().columns
     space = max(width - visible(text), 0)
     return ' ' * (space // 2) + text
 
@@ -39,3 +40,6 @@ def color_text(text: str, color: str = GREY) -> str:
     
 def clear_console() -> None:
     print('\033[3J\033[2J\033[H', end='', flush=True)
+    
+#def resize() -> int:
+#   WIDTH = shutil.get_terminal_size().columns
