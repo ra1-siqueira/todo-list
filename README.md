@@ -18,7 +18,7 @@ Programa em Python executado pelo terminal que permite criar, remover e fixar ta
 ```bash
 git clone https://github.com/ra1-siqueira/todo-list.git
 cd todo-list
-./todo
+./td
 ```
 
 Os comandos disponíveis estão especificados no arquivo `info.txt`, que pode ser acessado dentro do programa digitando `info` e apertando `ENTER`.
