@@ -75,8 +75,6 @@ def menu(option: list[str], manager: TaskManager) -> None:
             manager.reorder_after_pin(task_name)
         case ['dly', *_]:
             manager.toggle_daily(task_name)
-        case ['dly', *_]:
-            manager.toggle_daily(task_name)
         case ['rm', *_]:
             manager.delete(task_name)
         case ['f-rm', *_]:
