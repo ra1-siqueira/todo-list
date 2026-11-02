@@ -39,7 +39,4 @@ def color_text(text: str, color: str = GREY) -> str:
     return color + text + RESET
     
 def clear_console() -> None:
-    print('\033[3J\033[2J\033[H', end='', flush=True)
-    
-#def resize() -> int:
-#   WIDTH = shutil.get_terminal_size().columns
+    print('\033[H\033[2J\033[3J', end='', flush=True)
