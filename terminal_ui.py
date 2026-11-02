@@ -4,6 +4,7 @@ import unicodedata
 import sys
 import termios
 import tty
+from time import sleep
 
 #WIDTH  : int = shutil.get_terminal_size().columns # largura do terminal
 GREY   : str = '\033[90m'
@@ -40,3 +41,10 @@ def color_text(text: str, color: str = GREY) -> str:
     
 def clear_console() -> None:
     print('\033[H\033[2J\033[3J', end='', flush=True)
+
+def hide_cursor(seconds: int) -> None:
+    try:
+        print('\033[?25l', end='', flush=True)
+        sleep(seconds)
+    finally:
+        print('\033[?25h', end='', flush=True)

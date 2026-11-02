@@ -6,6 +6,7 @@ import readline
 # Modulos do projeto
 from terminal_ui import (
     clear_console,
+    hide_cursor,
     wait_key,
     visible,
     centered,
@@ -69,6 +70,10 @@ def show_info(manager: TaskManager) -> None:
         f'{GREY}para voltar...{RESET}'
     )
     wait_key()
+    
+def resolve_unknown(text: str) -> None:
+    print(f"Erro: Comando '{text}' não existe.")
+    hide_cursor(2)
  
 def menu(option: list[str], manager: TaskManager) -> None:
     if len(option) > 1:
@@ -101,6 +106,8 @@ def menu(option: list[str], manager: TaskManager) -> None:
             return
         case ['ex']:
             sys.exit()
+        case _:
+            resolve_unknown(option[0])
 
 def main() -> None:
     clear_console()
