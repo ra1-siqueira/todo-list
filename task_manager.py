@@ -33,10 +33,10 @@ class TaskManager:
     def toggle_pin(self, name: str, case: str) -> None:
         task = self._find(name)
         if task:
-            if task.is_pinned and case == 'unpin':
-                task.unpin()
-            elif task.is_pinned == False and case == 'pin':
+            if case == 'pin':
                 task.pin()
+            elif case == 'unpin':
+                task.unpin()
             self.storage.update_all(self.tasks)
                     
     def toggle_daily(self, name: str) -> None:
