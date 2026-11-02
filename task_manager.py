@@ -46,7 +46,7 @@ class TaskManager:
             task.toggle_daily()
             self.storage.update_all(self.tasks)
             
-    def reorder_after_pin(self, recently_pinned: str) -> None:
+    def order_by_pin(self, recently_pinned: str) -> None:
         pinned_tasks     = []
         not_pinned_tasks = []       
         for t in self.tasks:
@@ -60,6 +60,17 @@ class TaskManager:
             elif t.name != recently_pinned:
                 not_pinned_tasks.append(t)              
         self.tasks = pinned_tasks + not_pinned_tasks
+        self.storage.update_all(self.tasks)
+
+    def order_by_done(self) -> None:
+        tasks_done     = []
+        tasks_not_done = []      
+        for t in self.tasks:
+            if t.is_done:
+                tasks_done.append(t)
+            else:
+                tasks_not_done.append(t)
+        self.tasks = tasks_not_done + tasks_done
         self.storage.update_all(self.tasks)
 
     # nao deleta uma tarefa fixada
@@ -96,7 +107,7 @@ class TaskManager:
         self.storage.update_all(self.tasks)
         
     def update_daily_tasks(self) -> None:
-        current_day = date.today()
+        current_day = str(date.today())
         if not self.tasks:
             return
         for t in self.tasks:

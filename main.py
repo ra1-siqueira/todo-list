@@ -83,9 +83,11 @@ def menu(option: list[str], manager: TaskManager) -> None:
             manager.create(task_name)
         case ['done', *_]:
             manager.toggle_done(task_name)
+            manager.order_by_done()
+            manager.order_by_pin('')
         case ['pin', *_] | ['unpin', *_]:
             manager.toggle_pin(task_name, option[0])
-            manager.reorder_after_pin(task_name)
+            manager.order_by_pin(task_name)
         case ['dly', *_]:
             manager.toggle_daily(task_name)
         case ['rm', *_]:
@@ -105,6 +107,7 @@ def menu(option: list[str], manager: TaskManager) -> None:
         case ['rfsh']:
             return
         case ['ex']:
+            clear_console()
             sys.exit()
         case _:
             resolve_unknown(option[0])

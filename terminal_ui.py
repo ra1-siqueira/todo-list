@@ -6,7 +6,6 @@ import termios
 import tty
 from time import sleep
 
-#WIDTH  : int = shutil.get_terminal_size().columns # largura do terminal
 GREY   : str = '\033[90m'
 YELLOW : str = '\033[33m'
 GREEN  : str = '\033[32m'
