@@ -1,9 +1,10 @@
 # Biblioteca padrao
-from datetime   import date
+import readline
+from datetime import date
 
 # Modulos do projeto
-from storage    import TaskStorage
-from task       import Task
+from storage import TaskStorage
+from task    import Task
 
 class TaskManager:
     def __init__(self) -> None:
@@ -102,3 +103,18 @@ class TaskManager:
             if t.is_daily and t.is_done and t.date != current_day:
                 t.toggle_done()
         self.storage.update_all(self.tasks)
+      
+    def get_info(self) -> str:
+        return self.storage.get_info()
+    
+    def update_history(self, command: str) -> None:
+        self.storage.update_history(command)
+        
+    def load_history(self) -> None:
+        history = self.storage.get_history()
+        for command in history:
+            readline.add_history(command.rstrip('\n'))
+
+    def clear_history(self) -> None:
+        readline.clear_history()
+        self.storage.clear_history()

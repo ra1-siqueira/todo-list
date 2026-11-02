@@ -1,12 +1,26 @@
 import re
 import shutil
 import unicodedata
+import sys
+import termios
+import tty
 
 WIDTH  : int = shutil.get_terminal_size().columns # largura do terminal
 GREY   : str = '\033[90m'
 YELLOW : str = '\033[33m'
 GREEN  : str = '\033[32m'
 RESET  : str = '\033[0m'
+
+def wait_key():
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)   
+    try:
+        tty.setraw(fd)
+        while True:
+            if sys.stdin.read(1) in ('\r', '\n'):
+                break
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
 def visible(text: str) -> int:
     colorless = re.sub(r'\033\[[0-9;]*m', '', text)
@@ -22,3 +36,6 @@ def centered(text: str, width: int = WIDTH) -> str:
 
 def color_text(text: str, color: str = GREY) -> str:
     return color + text + RESET
+    
+def clear_console() -> None:
+    print('\033[3J\033[2J\033[H', end='', flush=True)

@@ -1,14 +1,25 @@
 # Biblioteca padrao
 import os
 import sys
+import readline
 
 # Modulos do projeto
-from formatting   import visible, centered, color_text
-from formatting   import WIDTH, GREY, YELLOW, GREEN, RESET
+from terminal_ui import (
+    clear_console,
+    wait_key,
+    visible,
+    centered,
+    color_text,
+    WIDTH,
+    GREY,
+    YELLOW,
+    GREEN,
+    RESET
+)
 from task_manager import TaskManager
 
 def show_tasks(manager: TaskManager) -> None:
-    os.system('clear')
+    clear_console()
     print()
     print()
     print()
@@ -49,23 +60,21 @@ def display(manager: TaskManager) -> None:
         f'para ver a lista de comandos.{RESET}'
     ))
 
-def show_info() -> None:
-    os.system('clear')
-    with open('info.txt', encoding='utf-8') as f:
-        info = f.read()
+def show_info(manager: TaskManager) -> None:
+    clear_console()
+    info = manager.get_info()
     formtd_info = info.format(YELLOW=YELLOW, RESET=RESET)
     print(formtd_info)
-    input(
+    print(
         f'\n  {GREY}Pressione {YELLOW}ENTER{RESET} '
         f'{GREY}para voltar...{RESET}'
     )
+    wait_key()
  
 def menu(option: list[str], manager: TaskManager) -> None:
     if len(option) > 1:
         task_name = option[1].upper()
     match option:
-        case ['info']:
-            show_info()         
         case ['add', *_]:
             manager.create(task_name)
         case ['done', *_]:
@@ -85,23 +94,29 @@ def menu(option: list[str], manager: TaskManager) -> None:
             manager.force_delete_all()
         case ['umrkall']:
             manager.mark_all_as_pending()
+        case ['clhist']:
+            manager.clear_history()
+        case ['info']:
+            show_info(manager)
         case ['rfsh']:
             return
         case ['ex']:
             sys.exit()
 
 def main() -> None:
-    manager = TaskManager()
-    os.system('clear')
-    
-    while(True):
+    clear_console()
+    manager = TaskManager() 
+    manager.load_history()
+    while True:
         manager.update_daily_tasks()
         display(manager)
         user_input = input(
             f'\n\n{GREY}┌────({GREEN}user@todolist'
             f'{RESET}{GREY})\n└─┤{RESET} $ '
-        ).split(' ', 1)
-        menu(user_input, manager)
+        )
+        manager.update_history(user_input)
+        command = user_input.split(' ', 1)
+        menu(command, manager)
         
 if __name__ == '__main__':
     main()

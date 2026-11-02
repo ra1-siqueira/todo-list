@@ -11,6 +11,7 @@ Programa em Python executado pelo terminal que permite criar, remover e fixar ta
 ## Requisitos
 
 - Python 3.10 ou superior
+- Sistema operacional Unix/Linux
 
 ## Como usar
 

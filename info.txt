@@ -11,6 +11,7 @@
   {YELLOW}umrkall{RESET} ───────── desmarca todas as tarefas feitas
   {YELLOW}cl{RESET} ────────────── apaga a lista
   {YELLOW}f-cl{RESET} ──────────── apaga a lista, incluindo as tarefas fixadas
+  {YELLOW}clhist{RESET} ────────── apaga o histórico navegável
   {YELLOW}rfsh{RESET} ──────────── recarrega a lista
   {YELLOW}ex{RESET} ────────────── finaliza o programa
 
